@@ -44,24 +44,7 @@ def load_listing_results(html_path) -> list[tuple]:
 
 
 def get_listing_details(listing_id) -> dict:
-    """
-    Parse through listing_<id>.html to extract listing details.
-
-    Args:
-        listing_id (str): The listing id of the Airbnb listing
-
-    Returns:
-        dict: Nested dictionary in the format:
-        {
-            "<listing_id>": {
-                "policy_number": str,
-                "host_type": str,
-                "host_name": str,
-                "room_type": str,
-                "location_rating": float
-            }
-        }
-    """
+   
     with open(f"html_files/listing_{listing_id}.html", "r", encoding="utf-8-sig") as file:
         soup = BeautifulSoup(file.read(), "html.parser")
     text = soup.get_text()
