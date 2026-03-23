@@ -104,19 +104,20 @@ def create_listing_database(html_path) -> list[tuple]:
     host_types = get_host_types(html_path)
     host_names = get_host_names(html_path)
     room_types = get_room_types(html_path)
-    location_rations = get_location_ratings(html_path)
+    location_ratings = get_location_ratings(html_path)
 
     for i in range(len(listing_titles)):
         database.append((
-            listing_titles[i]
-            listing_ids[i]
-            policy_numbers[i]
-            policy_numbers[i]
-            host_types[i]
-            host_names[i]
-            room_types[i]
-            location_ratings[i]
+            listing_titles[i],
+            listing_ids[i],
+            policy_numbers[i],
+            host_types[i],
+            host_names[i],
+            room_types[i],
+            location_ratings[i],
         ))
+
+    return database
 
 
 def output_csv(data, filename) -> None:
