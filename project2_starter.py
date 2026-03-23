@@ -166,25 +166,32 @@ def avg_location_rating_by_room_type(data) -> dict:
 
 
 def validate_policy_numbers(data) -> list[str]:
-    """
-    Validate policy_number format for each listing in data.
-    Ignore "Pending" and "Exempt" listings.
+   invalid = []
+   for row in data:
+       listing_id = row[1]
+       policy = row[2]
+       if policy == "Pending" or policy == "Exempt":
+           continue
+       
+       valid = False
+       if len(policy) == 13 and policy.startswith("20") and policy.endswith("STR"):
+           valid = True
 
-    Args:
-        data (list[tuple]): A list of tuples returned by create_listing_database()
+       if policy.startswith("STR-00") and len(policy) == 13:
+           valid = True
 
-    Returns:
-        list[str]: A list of listing_id values whose policy numbers do NOT match the valid format
-    """
-    # TODO: Implement checkout logic following the instructions
-    # ==============================
-    # YOUR CODE STARTS HERE
-    # ==============================
-    pass
-    # ==============================
-    # YOUR CODE ENDS HERE
-    # ==============================
+       if not valid:
+           invalid.append(listing_id)
+ 
+   return invalid
 
+        
+
+
+        
+           
+            
+           
 
 # EXTRA CREDIT
 def google_scholar_searcher(query):
