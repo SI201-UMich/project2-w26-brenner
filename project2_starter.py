@@ -196,16 +196,16 @@ def validate_policy_numbers(data) -> list[str]:
 # EXTRA CREDIT
 def google_scholar_searcher(query):
     url = "https://scholar.google.com/scholar?q=" + query
-    response = reqests.get(url)
+    response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
     titles = []
-    result = soup.find_all("h3")
+    results = soup.find_all("h3")
     for result in results:
         title = result.get_text()
         if title:
-            title.append(title)
+            title.append(titles)
 
-        return titles
+    return titles
  
 
 class TestCases(unittest.TestCase):
