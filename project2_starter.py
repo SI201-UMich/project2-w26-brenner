@@ -97,24 +97,26 @@ def get_listing_details(listing_id) -> dict:
 
 
 def create_listing_database(html_path) -> list[tuple]:
-    """
-    Use prior functions to gather all necessary information and create a database of listings.
+    database = []
+    listing_titles = get_listing_titles(html_path)
+    listing_ids = get_listing_ids(html_path)
+    policy_numbers = get_policy_numbers(html_path)
+    host_types = get_host_types(html_path)
+    host_names = get_host_names(html_path)
+    room_types = get_room_types(html_path)
+    location_rations = get_location_ratings(html_path)
 
-    Args:
-        html_path (str): The path to the HTML file containing the search results
-
-    Returns:
-        list[tuple]: A list of tuples. Each tuple contains:
-        (listing_title, listing_id, policy_number, host_type, host_name, room_type, location_rating)
-    """
-    # TODO: Implement checkout logic following the instructions
-    # ==============================
-    # YOUR CODE STARTS HERE
-    # ==============================
-    pass
-    # ==============================
-    # YOUR CODE ENDS HERE
-    # ==============================
+    for i in range(len(listing_titles)):
+        database.append((
+            listing_titles[i]
+            listing_ids[i]
+            policy_numbers[i]
+            policy_numbers[i]
+            host_types[i]
+            host_names[i]
+            room_types[i]
+            location_ratings[i]
+        ))
 
 
 def output_csv(data, filename) -> None:
