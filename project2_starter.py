@@ -121,26 +121,25 @@ def create_listing_database(html_path) -> list[tuple]:
 
 
 def output_csv(data, filename) -> None:
-    """
-    Write data to a CSV file with the provided filename.
+    sorted_data = sorted(data, key=lambda x: x[-1], reverse=True)
+    with open(filename, "w", newline="", encoding="utf-8-sig") as file:
+        writer = csv.writer(file)
+        writer.writerow([
+            "Listing Title",
+            "Listing ID",
+            "Policy Number",
+            "Host Type",
+            "Host Name",
+            "Room Type",
+            "Location Rating"
 
-    Sort by Location Rating (descending).
+        ])
 
-    Args:
-        data (list[tuple]): A list of tuples containing listing information
-        filename (str): The name of the CSV file to be created and saved to
+        for row in sorted_data:
+            writer.writerow(row)
+            
+    
 
-    Returns:
-        None
-    """
-    # TODO: Implement checkout logic following the instructions
-    # ==============================
-    # YOUR CODE STARTS HERE
-    # ==============================
-    pass
-    # ==============================
-    # YOUR CODE ENDS HERE
-    # ==============================
 
 
 def avg_location_rating_by_room_type(data) -> dict:
