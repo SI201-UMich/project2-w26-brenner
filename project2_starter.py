@@ -155,11 +155,11 @@ def avg_location_rating_by_room_type(data) -> dict:
             counts[room_type] = 0
 
         totals[room_type] += rating
-        counts[room_type] = 1
+        counts[room_type] += 1
     
     averages = {}
     for room_type in totals:
-        averages[room_type] = total{room_type} / counts[room_type]
+        averages[room_type] = totals[room_type] / counts[room_type]
 
     return averages
 
