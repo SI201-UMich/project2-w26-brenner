@@ -62,7 +62,7 @@ def get_listing_details(listing_id) -> dict:
             }
         }
     """
-    with open(f"html_files/listing_{listing_id}.html", "r") as file:
+    with open(f"html_files/listing_{listing_id}.html", "r", encoding="utf-8-sig") as file:
         soup = BeautifulSoup(file.read(), "html.parser")
     text = soup.get_text()
     if "Superhost" in text:
@@ -70,7 +70,9 @@ def get_listing_details(listing_id) -> dict:
     else:
         host_type = "regular"
 
-    if "Hosted by" is in text:
+
+    host_name = ""
+    if "Hosted by"  in text:
         host_name = text.split("Hosted by")[1].split("\n")[0].strip()
 
     if "Private" in text:
@@ -80,16 +82,16 @@ def get_listing_details(listing_id) -> dict:
     else:
         room_type = "Entire Room"
 
-    location_rating = 0.9
+    location_rating = 0.0
     if "Location" in text:
         try:
             location_rating = float(text.split("Location")[1].strip()[0:3])
         except: 
             location_rating = 0.0
 
-    policy_number = 0
+    policy_number = "Pending"
     if "Pending" in text:
-        policy_numer = "Pending"
+        policy_number = "Pending"
     elif "Exempt" in text:
         policy_number = "Exempt"
     else:
