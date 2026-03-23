@@ -195,23 +195,18 @@ def validate_policy_numbers(data) -> list[str]:
 
 # EXTRA CREDIT
 def google_scholar_searcher(query):
-    """
-    EXTRA CREDIT
+    url = "https://scholar.google.com/scholar?q=" + query
+    response = reqests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    titles = []
+    result = soup.find_all("h3")
+    for result in results:
+        title = result.get_text()
+        if title:
+            title.append(title)
 
-    Args:
-        query (str): The search query to be used on Google Scholar
-    Returns:
-        List of titles on the first page (list)
-    """
-    # TODO: Implement checkout logic following the instructions
-    # ==============================
-    # YOUR CODE STARTS HERE
-    # ==============================
-    pass
-    # ==============================
-    # YOUR CODE ENDS HERE
-    # ==============================
-
+        return titles
+ 
 
 class TestCases(unittest.TestCase):
     def setUp(self):
