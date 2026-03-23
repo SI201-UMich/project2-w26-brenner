@@ -32,14 +32,17 @@ def load_listing_results(html_path) -> list[tuple]:
     Returns:
         list[tuple]: A list of tuples containing (listing_title, listing_id)
     """
-    # TODO: Implement checkout logic following the instructions
-    # ==============================
-    # YOUR CODE STARTS HERE
-    # ==============================
-    pass
-    # ==============================
-    # YOUR CODE ENDS HERE
-    # ==============================
+    with open(html_path, "r", encoding="utf-8-sig") as file:
+        soup = BeautifulSoup(file.read(), "html.reader")
+
+        links = soup.find_all("a", href=True)
+
+        for link in links:
+            href = link["href"]
+
+            if "/rooms/" in href: 
+                listing_id = href.split(/rooms/[1].split("?")[0].strip("/"[0]))
+                listing_title = link.get_text(strip=true)
 
 
 def get_listing_details(listing_id) -> dict:
