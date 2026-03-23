@@ -43,6 +43,11 @@ def load_listing_results(html_path) -> list[tuple]:
             if "/rooms/" in href: 
                 listing_id = href.split(/rooms/[1].split("?")[0].strip("/"[0]))
                 listing_title = link.get_text(strip=true)
+                if listing_title:
+                    listing_tuple = (listing_title, listing_id)
+                    if listing_tuple not in results:
+                        results.append(listing_tuple)
+        return results
 
 
 def get_listing_details(listing_id) -> dict:
