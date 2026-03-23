@@ -23,17 +23,7 @@ If you are getting "encoding errors" while trying to open, read, or write from a
 
 
 def load_listing_results(html_path) -> list[tuple]:
-    """
-    Load file data from html_path and parse through it to find listing titles and listing ids.
-
-    Args:
-        html_path (str): The path to the HTML file containing the search results
-
-    Returns:
-        list[tuple]: A list of tuples containing (listing_title, listing_id)
-
-    """
-
+   
     results = []
     with open(html_path, "r", encoding="utf-8-sig") as file:
         soup = BeautifulSoup(file.read(), "html.parser")
@@ -72,14 +62,53 @@ def get_listing_details(listing_id) -> dict:
             }
         }
     """
-    # TODO: Implement checkout logic following the instructions
-    # ==============================
-    # YOUR CODE STARTS HERE
-    # ==============================
-    pass
-    # ==============================
-    # YOUR CODE ENDS HERE
-    # ==============================
+    with open(f"html_files/listing_{listing_id}.html", "r") as file:
+        soup = BeautifulSoup(file.read(), "html.parser")
+    text = soup.get_text()
+    if "Superhost" in text:
+        host_type = "Superhost"
+    else:
+        host_type = "regular"
+
+    if "Hosted by" is in text:
+        host_name = text.split("Hosted by")[1].split("\n")[0].strip()
+
+    if "Private" in text:
+        room_type = "Private Room"
+    elif "Shared" in text:
+        room_type = "Shared Room"
+    else:
+        room_type = "Entire Room"
+
+    location_rating = 0.9
+    if "Location" in text:
+        try:
+            location_rating = float(text.split("Location")[1].strip()[0:3])
+        except: 
+            location_rating = 0.0
+
+    policy_number = 0
+    if "Pending" in text:
+        policy_numer = "Pending"
+    elif "Exempt" in text:
+        policy_number = "Exempt"
+    else:
+        for word in text.split():
+            if "STR" in word:
+                policy_number = word
+
+    return {
+        listing_id: {
+            "policy_number": policy_number,
+            "host_type": host_type,
+            "host_name": host_name,
+            "room_type": room_type,
+            "location_rating": location_rating
+        }
+    }
+
+
+
 
 
 def create_listing_database(html_path) -> list[tuple]:
