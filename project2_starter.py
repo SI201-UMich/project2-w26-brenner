@@ -112,17 +112,25 @@ def get_listing_details(listing_id) -> dict:
     
     
 
-    policy_number = "Pending"
-    if "Pending" in text:
-        policy_number = "Pending"
-    elif "Exempt" in text:
-        policy_number = "Exempt"
+    policy_number = ""
+    match = re.search(r"20\d{2}-00\d{4}STR|STR-\d{7}", text)
+    if match:
+        policy_number = match.group()
     else:
-        for word in text.split():
-            if "STR" in word:
-                policy_number = word[:11]
-                break
-
+        lines = soup.get_text("\n").split("\n")
+        for i in range(len(lines)):
+            clean_line = lines[i].strip()
+            if "policy" in clean_line.lower() or "license" in clean_line.lower():
+                for j in range(i, min(i+5, len(lines))):
+                    nearby = lines[j].strip()
+                    if re.search(r"\b[Pp]ending\b", nearby):
+                        policy_number = "Pending"
+                        break
+                    elif re.search(r"\b[Ee]xempt\b", nearby):
+                        policy_number = "Exempt"
+                        break
+                if policy_number:
+                    break
     return {
         listing_id: {
             "policy_number": policy_number,
@@ -211,10 +219,9 @@ def validate_policy_numbers(data) -> list[str]:
            continue
        
        valid = False
-       if len(policy) == 13 and policy.startswith("20") and policy.endswith("STR"):
+       if re.fullmatch(r"20\d{2}-00\d{4}STR", policy):
            valid = True
-
-       if policy.startswith("STR-00") and len(policy) == 13:
+       elif re.fullmatch(r"STR-\d{7}", policy):
            valid = True
 
        if not valid:
@@ -297,15 +304,14 @@ class TestCases(unittest.TestCase):
         self.assertEqual(result["Private Room"], 4.9)
 
     def test_validate_policy_numbers(self):
-        # TODO: Call validate_policy_numbers() on detailed_data and save the result into a variable invalid_listings.
-        # TODO: Check that the list contains exactly "16204265" for this dataset.
-        pass
+        invalid_listings = validate_policy_numbers(self.detailed_data)
+        self.assertEqual(invalid_listings, ["16204265"])
 
 
 def main():
     base_dir = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(base_dir, "html_files", "search_results.html")
-    detailed_data = create_listing_database(path)
+    detailed_data = create_listing_database(path) 
     output_csv(detailed_data, "airbnb_dataset.csv")
 
 
