@@ -34,8 +34,8 @@ def load_listing_results(html_path) -> list[tuple]:
             href = link["href"]
 
             if "/rooms/" in href: 
-                listing_id = href.split("/rooms/")[1].split("?")[0]
-                listing_title = link.get_text(strip=True)
+                listing_id = href.split("/rooms/")[1].split("?")[0].split("/")[-1]
+                listing_title = link.find_next("div").get_text(" ", strip=True).split("Super Clean")[0].strip()
                 if listing_title:
                     listing_tuple = (listing_title, listing_id)
                     if listing_tuple not in results:
@@ -45,7 +45,10 @@ def load_listing_results(html_path) -> list[tuple]:
 
 def get_listing_details(listing_id) -> dict:
    
-    with open(f"html_files/listing_{listing_id}.html", "r", encoding="utf-8-sig") as file:
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(base_dir, "html_files", f"listing_{listing_id}.html")
+    with open(path, "r", encoding="utf-8-sig") as file:
+
         soup = BeautifulSoup(file.read(), "html.parser")
     text = soup.get_text()
     if "Superhost" in text:
@@ -243,7 +246,8 @@ class TestCases(unittest.TestCase):
         # TODO: Read the CSV back in and store rows in a list.
         # TODO: Check that the first data row matches ["Guesthouse in San Francisco", "49591060", "STR-0000253", "Superhost", "Ingrid", "Entire Room", "5.0"].
 
-        os.remove(out_path)
+        if os.path.exists(out_path):
+            os.remove(out_path)
 
     def test_avg_location_rating_by_room_type(self):
         # TODO: Call avg_location_rating_by_room_type() and save the output.
@@ -257,7 +261,9 @@ class TestCases(unittest.TestCase):
 
 
 def main():
-    detailed_data = create_listing_database(os.path.join("html_files", "search_results.html"))
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(base_dir, "html_files", "search_results.html")
+    detailed_data = create_listing_database(path)
     output_csv(detailed_data, "airbnb_dataset.csv")
 
 
