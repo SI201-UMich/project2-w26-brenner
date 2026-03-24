@@ -98,24 +98,20 @@ def get_listing_details(listing_id) -> dict:
 
 def create_listing_database(html_path) -> list[tuple]:
     database = []
-    listing_titles = get_listing_titles(html_path)
-    listing_ids = get_listing_ids(html_path)
-    policy_numbers = get_policy_numbers(html_path)
-    host_types = get_host_types(html_path)
-    host_names = get_host_names(html_path)
-    room_types = get_room_types(html_path)
-    location_ratings = get_location_ratings(html_path)
-
-    for i in range(len(listing_titles)):
+    listings = load_listing_results(html_path)
+    for title, listing_id in listings:
+        details = get_listing_details(listing_id)[listing_id]
         database.append((
-            listing_titles[i],
-            listing_ids[i],
-            policy_numbers[i],
-            host_types[i],
-            host_names[i],
-            room_types[i],
-            location_ratings[i],
+            title,
+            listing_id,
+            details["policy_number"],
+            details["host_type"],
+            details["host_name"],
+            details["room_type"],
+            details["location_rating"]
         ))
+
+   
 
     return database
 
@@ -203,7 +199,7 @@ def google_scholar_searcher(query):
     for result in results:
         title = result.get_text()
         if title:
-            title.append(titles)
+            titles.append(title)
 
     return titles
  
@@ -219,7 +215,8 @@ class TestCases(unittest.TestCase):
     def test_load_listing_results(self):
         # TODO: Check that the number of listings extracted is 18.
         # TODO: Check that the FIRST (title, id) tuple is  ("Loft in Mission District", "1944564").
-        pass
+        self.assertEqual(len(self.listings), 18)
+        self.assertEqual(self.listings[0], ("Loft in Mission District", "1944564"))
 
     def test_get_listing_details(self):
         html_list = ["467507", "1550913", "1944564", "4614763", "6092596"]
