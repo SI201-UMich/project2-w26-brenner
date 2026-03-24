@@ -34,9 +34,11 @@ def load_listing_results(html_path) -> list[tuple]:
             href = link["href"]
 
             if "/rooms/" in href: 
-                listing_id = href.split("/rooms/")[1].split("?")[0].split("/")[-1]
-                listing_title = link.find_next("div").get_text(" ", strip=True).split("Super Clean")[0].strip()
-                if listing_title:
+               listing_id = href.split("/rooms/")[1].split("?")[0].split("/")[-1]
+               text_block = link.find_next("div").get_text("\n", strip=True)
+               listing_title = text_block.split("\n")[0].strip()
+
+               if listing_title:
                     listing_tuple = (listing_title, listing_id)
                     if listing_tuple not in results:
                         results.append(listing_tuple)
@@ -58,12 +60,33 @@ def get_listing_details(listing_id) -> dict:
 
 
     host_name = ""
-    if "Hosted by"  in text:
-        host_name = text.split("Hosted by")[1].split("\n")[0].strip()
+    lines = soup.get_text("\n").split("\n")
+    for i in range(len(lines)):
+        if "Hosted by" in lines [i]:
+            after = lines[i].split("Hosted by")[-1].strip()
+            if after:
+                host_name = after.split("Joined")[0].strip()
+            else:
+                for j in range(i+1, len(lines)):
+                    if lines[j].strip():
+                        host_name = lines[j].strip().split("Joined")[0].strip()
+                        break
+            break
+    room_type = "Entire Room"
+    non_empty_lines=[]
+    for line in lines:
+        clean_line = line.strip()
+        if clean_line:
+            non_empty_lines.append(clean_line)
 
-    if "Private" in text:
+    subtitle = ""
+    for line in non_empty_lines[:30]:
+        if " in " in line:
+            subtitle = line
+            break
+    if "Private" in subtitle: 
         room_type = "Private Room"
-    elif "Shared" in text:
+    elif "Shared" in subtitle:
         room_type = "Shared Room"
     else:
         room_type = "Entire Room"
@@ -249,11 +272,10 @@ class TestCases(unittest.TestCase):
         self.assertEqual(results[2]["1944564"]["location_rating"], 4.9)
 
     def test_create_listing_database(self):
-        # TODO: Check that each tuple in detailed_data has exactly 7 elements:
-        # (listing_title, listing_id, policy_number, host_type, host_name, room_type, location_rating)
+        for row in self.detailed_data:
+            self.assertEqual(len(row), 7)
 
-        # TODO: Spot-check the LAST tuple is ("Guest suite in Mission District", "467507", "STR-0005349", "Superhost", "Jennifer", "Entire Room", 4.8).
-        pass
+        self.assertEqual(self.detailed_data[-1], ("Guest suite in Mission District", "467507", "STR-0005349", "Superhost", "Jennifer", "Entire Room", 4.8))
 
     def test_output_csv(self):
         out_path = os.path.join(self.base_dir, "test.csv")
