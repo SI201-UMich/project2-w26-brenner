@@ -1,0 +1,22 @@
+1. I think this current system is not adequate. Because of the fact that law lags behind technology, there are often limited ways 
+to penalize hosts who do not properly register their properties. There may be in the future, as the laws catch up, but as of right now
+the consequences might be too lax. Plus, the government only really gets involved if someone flags an issue- otherwise
+they just let the system do its thing. I think allocating more funding to human investigators to ensure hosts are properly registering
+all of their information, and ensuring they are fined if they don't, would drastically improve this system.
+
+
+2. I think the most important factor in the legality of web scraping is the legal status of the content being scraped. If none of the content
+being scraped is copyrighted, and it's all in the public domain, there are very few legal avenues to shut down web scraping. But, it's obviously 
+very difficult to know when copyrighted content is being scraped. So, I think web scraping should be a regulated practice, 
+and people who want to do web scraping should be properly licensed or authorised so they know not to scrape copyrighted content,
+and they know the consequences if they do. Maybe the Federal Communications Commission in the US could have an office for issuing web scraping
+licenses. Then again, many would argue that such a system would be government overreach, and would amount to censoring. So there's really no perfect
+answer to this question, I believe.
+
+3. First, all data scraped must be on the surface web, and not be password-protected in any way. This is 
+probably the best way to ensure personal data like usernames, incomes, etc, are not scraped, or at least reduced
+from scraping. That way, data published on fully public, open-domain websites is able to be scraped,
+but personal medical records and education transcripts cannot be. Second, there must be a clear and articulable 
+reason why the data is being collected. It is obviously harmful to arbitrarily collect personal data, even if it is 
+public. So, anyone who is web scraping must be able to transparently explain what they plan
+to do with the data and how it will benefit their business.
